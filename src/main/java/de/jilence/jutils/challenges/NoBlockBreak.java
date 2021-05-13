@@ -17,11 +17,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class NoBlockBreak extends Challenge implements Listener {
 
-    private static NoBlockBreak noBlockBreak = new NoBlockBreak();
+    private static NoBlockBreak noBlockBreak;
 
     @Override
     public void onEnable() {
-
+        noBlockBreak = new NoBlockBreak();
     }
 
     @Override
