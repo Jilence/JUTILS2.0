@@ -80,5 +80,4 @@ public class NoBlockPlace extends Challenge implements Listener {
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
     }
-
 }
