@@ -30,8 +30,7 @@ public class Messages {
         long minutes = TimeUnit.SECONDS.toMinutes(time - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
         long seconds = TimeUnit.SECONDS.toSeconds(time - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes));
 
-        return (days == 0 ? "" : ((days < 10) ? "0" + days : days) + ((days == 1) ? " Tag, " :  " Tage, ")) +
-                ((hours < 10) ? "0" + hours : hours) + ":" +
+        return ((hours < 10) ? "0" + hours : hours) + ":" +
                 ((minutes < 10) ? "0" + minutes : minutes) + ":" +
                 ((seconds < 10) ? "0" + seconds : seconds);
 
