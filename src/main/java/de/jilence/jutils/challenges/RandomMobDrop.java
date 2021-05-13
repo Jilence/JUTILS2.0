@@ -24,8 +24,8 @@ import java.util.Random;
 
 public class RandomMobDrop extends Challenge implements Listener {
 
-    private static String RANDOM = "completelyRandom";
-    private static String INVENTORY_NAME = "§7 Random-Mob-Drop §9Challenge";
+    private static final String RANDOM = "completelyRandom";
+    private static final String INVENTORY_NAME = "§7 Random-Mob-Drop §9Challenge";
 
     private static final HashMap<EntityType, Material> randomItemDrop = new HashMap<>();
 
@@ -39,19 +39,9 @@ public class RandomMobDrop extends Challenge implements Listener {
 
         Bukkit.getPluginManager().registerEvents(new RandomMobDrop(), Main.getPlugin(Main.class));
 
-        for(EntityType entity : EntityType.values()) {
-            Random random = new Random();
-            Material material = Material.values()[random.nextInt((Material.values().length - 1))];
-
-            if(material == Material.AIR || material ==  Material.CAVE_AIR || material == Material.VOID_AIR) {
-                material = Material.STONE;
-            }
-
-            randomItemDrop.put(entity, material);
-
+        for (EntityType entity : EntityType.values()) {
+            randomItemDrop.put(entity, generateRandomMaterial());
         }
-
-
     }
 
     @Override
@@ -67,12 +57,11 @@ public class RandomMobDrop extends Challenge implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
 
-
-        if((event.getEntity() instanceof Player)) {
+        if ((event.getEntity() instanceof Player)) {
             return;
         }
 
-        if(!new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM)) {
+        if (!new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM)) {
             event.getDrops().clear();
             ItemStack drops = new ItemBuilder(randomItemDrop.get(event.getEntity().getType())).build();
             try {
@@ -81,14 +70,7 @@ public class RandomMobDrop extends Challenge implements Listener {
                 //ignore
             }
         } else {
-            Random random = new Random();
-            Material material = Material.values()[random.nextInt((Material.values().length - 1))];
-
-            if(material == Material.AIR || material ==  Material.CAVE_AIR || material == Material.VOID_AIR) {
-                material = Material.STONE;
-            }
-
-            ItemStack drops = new ItemBuilder(material).build();
+            ItemStack drops = new ItemBuilder(generateRandomMaterial()).build();
             event.getDrops().clear();
             try {
                 event.getDrops().add(drops);
@@ -96,15 +78,12 @@ public class RandomMobDrop extends Challenge implements Listener {
                 //ignore
             }
         }
-
     }
 
     @Override
     public void onTick() {
 
     }
-
-
 
     @Override
     public Inventory getSettingsInventory() {
@@ -158,11 +137,20 @@ public class RandomMobDrop extends Challenge implements Listener {
     @Override
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
-        if(material == Material.ZOMBIE_HEAD) {
+        if (material == Material.ZOMBIE_HEAD) {
             boolean bool = new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM);
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(RANDOM, !bool);
             player.openInventory(getSettingsInventory());
         }
+    }
 
+    private Material generateRandomMaterial() {
+        Random random = new Random();
+        Material material = Material.values()[random.nextInt((Material.values().length - 1))];
+
+        if (material == Material.AIR || material == Material.CAVE_AIR || material == Material.VOID_AIR) {
+            material = Material.STONE;
+        }
+        return material;
     }
 }
