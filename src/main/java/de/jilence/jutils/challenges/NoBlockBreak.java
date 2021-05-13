@@ -1,22 +1,24 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
 import de.jilence.jutils.Main;
 import de.jilence.jutils.challenge.Challenge;
 import de.jilence.jutils.challenge.ChallengeManager;
 import de.jilence.jutils.utils.ItemBuilder;
 import de.jilence.jutils.utils.LoreBuilder;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class NoBlockPlace extends Challenge implements Listener {
+public class NoBlockBreak extends Challenge implements Listener {
+
+    private static NoBlockBreak noBlockBreak = new NoBlockBreak();
+
     @Override
     public void onEnable() {
 
@@ -24,7 +26,7 @@ public class NoBlockPlace extends Challenge implements Listener {
 
     @Override
     public void onStart() {
-        Bukkit.getPluginManager().registerEvents(new NoBlockPlace(), Main.getPlugin(Main.class));
+        Bukkit.getPluginManager().registerEvents(new NoBlockBreak(), Main.getPlugin(Main.class));
     }
 
     @Override
@@ -37,15 +39,16 @@ public class NoBlockPlace extends Challenge implements Listener {
 
     }
 
-    @Override
-    public void onTick() {
-        Bukkit.broadcast(Component.text("TICK"), "bukkit.broadcast");
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event) {
-        ChallengeManager.loseChallenge(event.getPlayer(), "§7der Spieler §9%player §7ein Block abgebaut hat");
+    @Override
+    public void onTick() {
+
     }
+
 
     @Override
     public Inventory getSettingsInventory() {
@@ -54,18 +57,18 @@ public class NoBlockPlace extends Challenge implements Listener {
 
     @Override
     public ItemStack getDisplayItem() {
-        ItemStack itemStack = new ItemBuilder(Material.GRASS_BLOCK, 1).displayname("§7No-Block-Place §9Challenge").build();
+        ItemStack itemStack = new ItemBuilder(Material.IRON_PICKAXE, 1).displayname("§7No-Block-Break §9Challenge").build();
         new LoreBuilder(itemStack)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.HEADER)
                 .addSpace()
                 .addLoreLine("§7Bei Dieser §9Herausforderung §7darf kein Spieler,")
-                .addLoreLine("§7einen Block platzieren")
+                .addLoreLine("§7einen Block abbauen")
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.RIGHT_LEFT_CLICK)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.SETTINGS)
-                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.NOBLOCKPLACE), "§7Herausforderung")
+                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.NOBLOCKBREAK), "§7Herausforderung")
                 .addSpace();
 
         return itemStack;
@@ -80,5 +83,6 @@ public class NoBlockPlace extends Challenge implements Listener {
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
     }
+
 
 }

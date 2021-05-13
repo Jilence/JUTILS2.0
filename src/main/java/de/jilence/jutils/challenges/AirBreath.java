@@ -1,4 +1,4 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
 import de.jilence.jutils.Main;
 import de.jilence.jutils.challenge.Challenge;
@@ -9,7 +9,6 @@ import de.jilence.jutils.utils.ItemBuilder;
 import de.jilence.jutils.utils.LoreBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
