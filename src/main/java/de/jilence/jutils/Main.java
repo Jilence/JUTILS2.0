@@ -30,6 +30,7 @@ public final class Main extends JavaPlugin {
         return ERROR;
     }
 
+    @Override
     public void onLoad() {
         boolean reset = new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("reset");
         if (reset) {
