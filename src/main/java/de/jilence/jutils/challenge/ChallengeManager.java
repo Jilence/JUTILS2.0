@@ -1,7 +1,7 @@
 package de.jilence.jutils.challenge;
 
 import de.jilence.jutils.Main;
-import de.jilence.jutils.challenge.challenge.*;
+import de.jilence.jutils.challenges.*;
 import de.jilence.jutils.timer.Timer;
 import de.jilence.jutils.utils.ConfigManager;
 import de.jilence.jutils.utils.Messages;

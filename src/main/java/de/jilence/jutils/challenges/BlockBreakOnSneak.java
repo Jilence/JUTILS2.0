@@ -1,4 +1,4 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
 import de.jilence.jutils.Main;
 import de.jilence.jutils.challenge.Challenge;
@@ -6,22 +6,18 @@ import de.jilence.jutils.challenge.ChallengeManager;
 import de.jilence.jutils.utils.ItemBuilder;
 import de.jilence.jutils.utils.LoreBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.Random;
-
-public class RandomEffectOnDamage extends Challenge implements Listener {
-
+public class BlockBreakOnSneak extends Challenge implements Listener {
     @Override
     public void onEnable() {
 
@@ -29,7 +25,7 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
 
     @Override
     public void onStart() {
-        Bukkit.getPluginManager().registerEvents(new RandomEffectOnDamage(), Main.getPlugin(Main.class));
+        Bukkit.getPluginManager().registerEvents(new BlockBreakOnSneak(), Main.getPlugin(Main.class));
     }
 
     @Override
@@ -43,15 +39,16 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event) {
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
 
-        if(event.getEntity() instanceof Player) {
+        if(event.isSneaking()) {
 
-            Random random = new Random();
-            int i = random.nextInt(((PotionEffectType.values().length - 1)) + 1);
-            PotionEffectType effect = PotionEffectType.values()[i];
+            Block block = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
+            block.setType(Material.AIR);
 
-            Bukkit.getOnlinePlayers().forEach(player -> player.addPotionEffect(new PotionEffect(effect, 99999, 1)));
+            for(int i = 0; i < block.getLocation().getBlockY(); i++) {
+                event.getPlayer().getWorld().getBlockAt(block.getX(), i, block.getZ()).setType(Material.AIR);
+            }
 
         }
 
@@ -70,18 +67,18 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
 
     @Override
     public ItemStack getDisplayItem() {
-        ItemStack itemStack = new ItemBuilder(Material.POTION, 1).displayname("§7Effect on Damage §9Challenge").build();
+        ItemStack itemStack = new ItemBuilder(Material.LEATHER_BOOTS, 1).displayname("§7Block-Break-on-Sneak §9Challenge").build();
         new LoreBuilder(itemStack)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.HEADER)
                 .addSpace()
-                .addLoreLine("§7Wenn ein §9Spieler §7Schaden bekommt,")
-                .addLoreLine("§7bekommen alle §9Spieler §7einen random Effect.")
+                .addLoreLine("§7Wenn ein §9Spieler sneakt,")
+                .addLoreLine("§7wird der Block auf den er steht bis zum Bedrock §cabbgebaut")
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.RIGHT_LEFT_CLICK)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.SETTINGS)
-                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.RANDOMEFFECTONDAMAGE), "§7Herausforderung")
+                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.BLOCKBREAKONSNEAK), "§7Herausforderung")
                 .addSpace();
 
         return itemStack;

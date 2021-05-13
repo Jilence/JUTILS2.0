@@ -1,6 +1,5 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
-import com.sun.tools.javac.jvm.Items;
 import de.jilence.jutils.Main;
 import de.jilence.jutils.challenge.Challenge;
 import de.jilence.jutils.challenge.ChallengeManager;
@@ -11,13 +10,10 @@ import de.jilence.jutils.utils.LoreBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -25,12 +21,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Random;
 
-public class RandomMobDrop extends Challenge implements Listener {
+public class RandomBlockDrop extends Challenge implements Listener {
 
-    private static String RANDOM = "completelyRandom";
-    private static String INVENTORY_NAME = "§7 Random-Mob-Drop §9Challenge";
+    private static final String RANDOM = "completelyRandomMob";
+    private static final String INVENTORY_NAME = "§7 Random-Block-Drop §9Challenge";
 
-    private static final HashMap<EntityType, Material> randomItemDrop = new HashMap<>();
+    private static final HashMap<Material, Material> randomItemDrop = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -40,20 +36,21 @@ public class RandomMobDrop extends Challenge implements Listener {
     @Override
     public void onStart() {
 
-        Bukkit.getPluginManager().registerEvents(new RandomMobDrop(), Main.getPlugin(Main.class));
+        Bukkit.getPluginManager().registerEvents(new RandomBlockDrop(), Main.getPlugin(Main.class));
 
-        for(EntityType entity : EntityType.values()) {
+        for(Material materialBlock : Material.values()) {
             Random random = new Random();
-            Material material = Material.values()[random.nextInt((Material.values().length - 1))];
+            Material material = Material.AIR;
 
-            if(material == Material.AIR || material ==  Material.CAVE_AIR || material == Material.VOID_AIR) {
-                material = Material.STONE;
+            while (material == Material.VOID_AIR || material == Material.AIR || material == Material.CAVE_AIR || material.isAir()) {
+                material = Material.values()[random.nextInt((Material.values().length - 1))];
             }
 
-            randomItemDrop.put(entity, material);
+
+
+            randomItemDrop.put(materialBlock, material);
 
         }
-
 
     }
 
@@ -68,33 +65,30 @@ public class RandomMobDrop extends Challenge implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDeath(EntityDeathEvent event) {
-
-
-        if((event.getEntity() instanceof Player)) {
-            return;
-        }
+    public void onBlockBreak(BlockBreakEvent event) {
 
         if(!new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM)) {
-            event.getDrops().clear();
-            ItemStack drops = new ItemBuilder(randomItemDrop.get(event.getEntity().getType())).build();
+
+            Material material = randomItemDrop.get(event.getBlock().getType());
+
+            event.getBlock().setType(Material.AIR);
             try {
-                event.getDrops().add(drops);
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemBuilder(material).build());
             } catch (IllegalArgumentException ignore) {
                 //ignore
             }
+
         } else {
             Random random = new Random();
-            Material material = Material.values()[random.nextInt((Material.values().length - 1))];
+            Material material = Material.AIR;
 
-            if(material == Material.AIR || material ==  Material.CAVE_AIR || material == Material.VOID_AIR) {
-                material = Material.STONE;
+            while (material == Material.VOID_AIR || material == Material.AIR || material == Material.CAVE_AIR || material.isAir()) {
+                material = Material.values()[random.nextInt((Material.values().length - 1))];
             }
 
-            ItemStack drops = new ItemBuilder(material).build();
-            event.getDrops().clear();
+            event.getBlock().setType(Material.AIR);
             try {
-                event.getDrops().add(drops);
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemBuilder(material).build());
             } catch (IllegalArgumentException ignore) {
                 //ignore
             }
@@ -114,12 +108,12 @@ public class RandomMobDrop extends Challenge implements Listener {
         Inventory inventory = Bukkit.createInventory(null, 3 * 9, Component.text(INVENTORY_NAME));
         InventoryBuilder.fillInventory(inventory, new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayname("").build());
 
-        ItemStack chunkDestroyerTimeItem = new ItemBuilder(Material.ZOMBIE_HEAD).displayname("§7Random-Mod-Drop §8● §9Komplett-Random").build();
-        new LoreBuilder(chunkDestroyerTimeItem)
+        ItemStack randomDropItem = new ItemBuilder(Material.REDSTONE_BLOCK).displayname("§7Random-Block-Drop §8● §9Komplett-Random").build();
+        new LoreBuilder(randomDropItem)
                 .addSpace()
                 .addLoreLine("§9Komplett Random:")
                 .addParagraph("§7Es wird immer ein anderes Item gedroppt,")
-                .addParagraph("§cnicht §7immer das gleiche für ein Mob")
+                .addParagraph("§cnicht §7immer das gleiche für ein Block")
                 .addSpace()
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Umschalten")
                 .addLoreLine(LoreBuilder.MESSAGES.RIGHTCLICK.getMessage() + "§7 Umschalten")
@@ -127,27 +121,27 @@ public class RandomMobDrop extends Challenge implements Listener {
                 .addLoreLine("§7Komplett Random: §9" + (new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM) ? "§2aktiviert" : "§4deaktiviert"))
                 .addSpace();
 
-        inventory.setItem(4 + 9, chunkDestroyerTimeItem);
+        inventory.setItem(4 + 9, randomDropItem);
 
         return inventory;
     }
 
     @Override
     public ItemStack getDisplayItem() {
-        ItemStack itemStack = new ItemBuilder(Material.ZOMBIE_HEAD, 1).displayname("§7Random-Mob-Drop §9Challenge").build();
+        ItemStack itemStack = new ItemBuilder(Material.FARMLAND, 1).displayname("§7Random-Block-Drop §9Challenge").build();
         new LoreBuilder(itemStack)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.HEADER)
                 .addSpace()
-                .addLoreLine("§7Monster droppen andere Items als gewöhnlich")
+                .addLoreLine("§7Blöcke droppen andere Items als gewöhnlich")
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.RIGHT_LEFT_CLICK)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.SETTINGS)
-                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.RANDOMMOBDROP), "§7Herausforderung")
+                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.RANDOMBLOCKDROP), "§7Herausforderung")
                 .addLoreLine("§7Komplett Random: §9" + (new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM) ? "§2aktiviert" : "§4deaktiviert"))
-                .addParagraph("§7Komplett Random: Bei jeden Mob wird ein anderes Item gedroppt")
-                .addParagraph("§7Sonst wird immer das gleiche Item bei einen Mob gedroppt")
+                .addParagraph("§7Komplett Random: Bei jeden Block wird ein anderes Item gedroppt")
+                .addParagraph("§7Sonst wird immer das gleiche Item bei einen Block gedroppt")
                 .addSpace();
 
         return itemStack;
@@ -160,12 +154,10 @@ public class RandomMobDrop extends Challenge implements Listener {
 
     @Override
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
-
-        if(material == Material.ZOMBIE_HEAD) {
+        if(material == Material.REDSTONE_BLOCK) {
             boolean bool = new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM);
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(RANDOM, !bool);
             player.openInventory(getSettingsInventory());
         }
-
     }
 }
