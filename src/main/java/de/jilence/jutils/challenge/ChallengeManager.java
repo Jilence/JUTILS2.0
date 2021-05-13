@@ -13,40 +13,25 @@ import org.bukkit.inventory.ItemStack;
 
 public class ChallengeManager {
 
-    private static final Challenge NoBlockBreakChallenge = new NoBlockBreak();
-    private static final Challenge NoBlockPlaceChallenge = new NoBlockPlace();
-    private static final Challenge ChunkDestroyer = new ChunkDestroyer();
-    private static final Challenge RandomEffectOnDamage = new RandomEffectOnDamage();
-    private static final Challenge AirBreath = new AirBreath();
-    private static final Challenge RandomMobDrop = new RandomMobDrop();
-    private static final Challenge RandomBlockDrop = new RandomBlockDrop();
-    private static final Challenge BlockBreakOnSneak = new BlockBreakOnSneak();
-    private static final Challenge ForceBlockChallenge = new ForceBlockChallenge();
-
     public enum Challenges {
 
-        NOBLOCKBREAK(NoBlockBreakChallenge.getDisplayItem(), 1+9, NoBlockBreakChallenge),
-        NOBLOCKPLACE(NoBlockPlaceChallenge.getDisplayItem(), 2+9, NoBlockPlaceChallenge),
-        CHUNKDESTROYER(ChunkDestroyer.getDisplayItem(), 3+9, ChunkDestroyer),
-        RANDOMEFFECTONDAMAGE(RandomEffectOnDamage.getDisplayItem(), 4+9, RandomEffectOnDamage),
-        AIRBREATH(AirBreath.getDisplayItem(), 5+9, AirBreath),
-        RANDOMMOBDROP(RandomMobDrop.getDisplayItem(), 6+9, RandomMobDrop),
-        RANDOMBLOCKDROP(RandomBlockDrop.getDisplayItem(), 7+9, RandomBlockDrop),
-        BLOCKBREAKONSNEAK(BlockBreakOnSneak.getDisplayItem(), 1+18, BlockBreakOnSneak),
-        FORCEBLOCKCHALLENGE(ForceBlockChallenge.getDisplayItem(), 2+18, ForceBlockChallenge);
+        NOBLOCKBREAK(1+9, new NoBlockBreak()),
+        NOBLOCKPLACE(2+9, new NoBlockPlace()),
+        CHUNKDESTROYER(3+9, new ChunkDestroyer()),
+        RANDOMEFFECTONDAMAGE(4+9, new RandomEffectOnDamage()),
+        AIRBREATH( 5+9, new AirBreath()),
+        RANDOMMOBDROP(6+9, new RandomMobDrop()),
+        RANDOMBLOCKDROP(7+9, new RandomBlockDrop()),
+        BLOCKBREAKONSNEAK(1+18, new BlockBreakOnSneak()),
+        FORCEBLOCKCHALLENGE(2+18, new ForceBlockChallenge());
 
         ItemStack itemStack;
         int slot;
         Challenge challenge;
 
-        Challenges(ItemStack itemStack, int slot, Challenge challenge) {
-            this.itemStack = itemStack;
+        Challenges(int slot, Challenge challenge) {
             this.slot = slot;
             this.challenge = challenge;
-        }
-
-        public ItemStack getItemStack() {
-            return itemStack;
         }
 
         public void setItemStack(ItemStack itemStack) {
