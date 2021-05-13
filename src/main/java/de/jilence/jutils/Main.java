@@ -11,6 +11,8 @@ import de.jilence.jutils.listener.InventoryListener;
 import de.jilence.jutils.listener.JoinQuitListener;
 import de.jilence.jutils.timer.Timer;
 import de.jilence.jutils.utils.ConfigManager;
+import de.jilence.jutils.utils.Messages;
+import de.jilence.jutils.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -43,12 +45,11 @@ public final class Main extends JavaPlugin {
     public void onLoad() {
         boolean reset = new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("reset");
         if (reset) {
-            deleteFolder("world");
-            deleteFolder("world_nether");
-            deleteFolder("world_the_end");
+            Utils.deleteFolder("world");
+            Utils.deleteFolder("world_nether");
+            Utils.deleteFolder("world_the_end");
             new ConfigManager(ConfigManager.CONFIGS.CONFIG).set("reset", false);
         }
-
     }
 
     @Override
@@ -57,10 +58,12 @@ public final class Main extends JavaPlugin {
         commandRegistration();
         listenerRegistration(Bukkit.getPluginManager());
 
-        villageSpawn();
+        Utils.villageSpawn();
+        Utils.createPlayerDateFolder();
 
         Timer.setPause(true);
         Timer.startTimer();
+        Messages.startupMessage();
 
         for(int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
             ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
@@ -89,21 +92,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new GameListener(), this);
     }
 
-    private void deleteFolder(String folder) {
-        if(Files.exists(Paths.get(folder))) {
-            try {
-                Files.walk(Paths.get(folder)).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-    private void villageSpawn() {
-        if(new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("villageSpawn")) {
-            Location village = Bukkit.getWorld("world").locateNearestStructure(Bukkit.getWorld("world").getSpawnLocation(), StructureType.VILLAGE, 5000, true);
-            Bukkit.getWorld("world").setSpawnLocation(village);
-        }
-    }
+
 
 }

@@ -1,6 +1,8 @@
 package de.jilence.jutils.utils;
 
 import de.jilence.jutils.Main;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +44,19 @@ public class Messages {
 
         return ((minutes < 10) ? "0" + minutes : minutes) + ":" +
                 ((seconds < 10) ? "0" + seconds : seconds);
+
+    }
+
+    public static void startupMessage() {
+        Bukkit.getConsoleSender().sendMessage(Component.text(""));
+        Bukkit.getConsoleSender().sendMessage(Component.text("\n" +
+                "░░░░░██╗██╗░░░██╗████████╗██╗██╗░░░░░░██████╗\n" +
+                "░░░░░██║██║░░░██║╚══██╔══╝██║██║░░░░░██╔════╝\n" +
+                "░░░░░██║██║░░░██║░░░██║░░░██║██║░░░░░╚█████╗░\n" +
+                "██╗░░██║██║░░░██║░░░██║░░░██║██║░░░░░░╚═══██╗\n" +
+                "╚█████╔╝╚██████╔╝░░░██║░░░██║███████╗██████╔╝\n" +
+                "░╚════╝░░╚═════╝░░░░╚═╝░░░╚═╝╚══════╝╚═════╝░"));
+        Bukkit.getConsoleSender().sendMessage(Component.text(""));
 
     }
 
