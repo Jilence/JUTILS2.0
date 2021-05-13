@@ -10,27 +10,30 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemBuilder {
 
     private ItemStack item;
     private ItemMeta meta;
-    private Material material = Material.STONE;
+    private Material material;
     private int amount = 1;
-    private MaterialData data;
+    private @Nullable MaterialData data;
     private short damage = 0;
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private String displayname;
-    private List<String> lore = new ArrayList<>();
+    private @Nullable Component displayname;
+    private @Nullable List<Component> lore = new ArrayList<>();
     private List<ItemFlag> flags = new ArrayList<>();
 
     private boolean andSymbol = true;
@@ -50,7 +53,7 @@ public class ItemBuilder {
      */
     public ItemBuilder(Material material, int amount) {
         if (material == null) material = Material.AIR;
-        if (((amount > material.getMaxStackSize()) || (amount <= 0)) && (!unsafeStackSize)) amount = 1;
+        if (amount > material.getMaxStackSize() || amount <= 0) amount = 1;
         this.amount = amount;
         this.item = new ItemStack(material, amount);
         this.material = material;
@@ -66,7 +69,7 @@ public class ItemBuilder {
         this.material = material;
         if (((amount > material.getMaxStackSize()) || (amount <= 0)) && (!unsafeStackSize)) amount = 1;
         this.amount = amount;
-        this.displayname = displayname;
+        this.displayname = Component.text(displayname);
     }
 
     /**
@@ -77,7 +80,7 @@ public class ItemBuilder {
         Validate.notNull(displayname, "The Displayname is null.");
         this.item = new ItemStack(material);
         this.material = material;
-        this.displayname = displayname;
+        this.displayname = Component.text(displayname);
     }
 
     /**
@@ -91,16 +94,14 @@ public class ItemBuilder {
         this.material = item.getType();
         this.amount = item.getAmount();
         this.data = item.getData();
-        this.damage = item.getDurability();
+        this.damage = (short) ((Damageable) item.getItemMeta()).getDamage();
         this.enchantments = item.getEnchantments();
         if (item.hasItemMeta())
-            this.displayname = item.getItemMeta().getDisplayName();
+            this.displayname = item.getItemMeta().displayName();
         if (item.hasItemMeta())
-            this.lore = item.getItemMeta().getLore();
+            this.lore = item.getItemMeta().lore();
         if (item.hasItemMeta())
-            for (ItemFlag f : item.getItemMeta().getItemFlags()) {
-                flags.add(f);
-            }
+            flags.addAll(item.getItemMeta().getItemFlags());
     }
 
     /**
@@ -122,7 +123,6 @@ public class ItemBuilder {
         this.amount = builder.amount;
         this.damage = builder.damage;
         this.data = builder.data;
-        this.damage = builder.damage;
         this.enchantments = builder.enchantments;
         this.displayname = builder.displayname;
         this.lore = builder.lore;
@@ -225,7 +225,7 @@ public class ItemBuilder {
      */
     public ItemBuilder displayname(String displayname) {
         Validate.notNull(displayname, "The Displayname is null.");
-        this.displayname = andSymbol ? ChatColor.translateAlternateColorCodes('&', displayname) : displayname;
+        this.displayname = andSymbol ? Component.text(ChatColor.translateAlternateColorCodes('&', displayname)) : Component.text(displayname);
         return this;
     }
 
@@ -236,7 +236,8 @@ public class ItemBuilder {
      */
     public ItemBuilder lore(String line) {
         Validate.notNull(line, "The Line is null.");
-        lore.add(andSymbol ? ChatColor.translateAlternateColorCodes('&', line) : line);
+        if(lore == null) lore = new ArrayList<>();
+        lore.add(andSymbol ? Component.text(ChatColor.translateAlternateColorCodes('&', line)) : Component.text(line));
         return this;
     }
 
@@ -247,7 +248,11 @@ public class ItemBuilder {
      */
     public ItemBuilder lore(List<String> lore) {
         Validate.notNull(lore, "The Lores are null.");
-        this.lore = lore;
+        List<Component> componentLore = new ArrayList<>();
+        for (String line : lore) {
+            componentLore.add(Component.text(line));
+        }
+        this.lore = componentLore;
         return this;
     }
 
@@ -287,7 +292,8 @@ public class ItemBuilder {
      */
     public ItemBuilder lore(String line, int index) {
         Validate.notNull(line, "The Line is null.");
-        lore.set(index, andSymbol ? ChatColor.translateAlternateColorCodes('&', line) : line);
+        if(lore == null) lore = new ArrayList<>();
+        lore.set(index, andSymbol ? Component.text(ChatColor.translateAlternateColorCodes('&', line)) : Component.text(line));
         return this;
     }
 
@@ -298,22 +304,22 @@ public class ItemBuilder {
      */
     public ItemBuilder addLoreLine(String line) {
         ItemMeta im = item.getItemMeta();
-        List<String> lore = new ArrayList<>();
-        if (im.hasLore()) lore = new ArrayList<>(im.getLore());
-        lore.add(line);
-        im.setLore(lore);
+        List<Component> lore = new ArrayList<>();
+        if (im.hasLore()) lore = new ArrayList<>(im.lore());
+        lore.add(Component.text(line));
+        im.lore(lore);
         item.setItemMeta(im);
         return this;
     }
 
-    public ItemBuilder addLoreLine(String... line) {
+    public ItemBuilder addLoreLine(String... lines) {
         ItemMeta im = item.getItemMeta();
-        List<String> lore = new ArrayList<>();
-        if (im.hasLore()) lore = new ArrayList<>(im.getLore());
-
-        lore.addAll(Arrays.asList(line));
-
-        im.setLore(lore);
+        List<Component> lore = new ArrayList<>();
+        if (im.hasLore()) lore = new ArrayList<>(im.lore());
+        for (String line : lines) {
+            lore.add(Component.text(line));
+        }
+        im.lore(lore);
         item.setItemMeta(im);
         return this;
     }
@@ -433,7 +439,7 @@ public class ItemBuilder {
     /**
      * Returns the Displayname
      */
-    public String getDisplayname() {
+    public @Nullable Component getDisplayname() {
         return displayname;
     }
 
@@ -471,7 +477,7 @@ public class ItemBuilder {
     /**
      * Returns the Lores
      */
-    public List<String> getLores() {
+    public List<Component> getLores() {
         return lore;
     }
 
@@ -506,7 +512,7 @@ public class ItemBuilder {
     /**
      * Returns the MaterialData
      */
-    public MaterialData getData() {
+    public @Nullable MaterialData getData() {
         return data;
     }
 
@@ -516,7 +522,7 @@ public class ItemBuilder {
      * @deprecated Use {@code ItemBuilder#getLores}
      */
     @Deprecated
-    public List<String> getLore() {
+    public @Nullable List<Component> getLore() {
         return lore;
     }
 
@@ -615,7 +621,7 @@ public class ItemBuilder {
     public ItemStack build() {
         item.setType(material);
         item.setAmount(amount);
-        item.setDurability(damage);
+        ((Damageable) item.getItemMeta()).setDamage(damage);
         meta = item.getItemMeta();
         if (data != null) {
             item.setData(data);
@@ -624,7 +630,7 @@ public class ItemBuilder {
             item.addUnsafeEnchantments(enchantments);
         }
         if (displayname != null) {
-            meta.setDisplayName(displayname);
+            meta.displayName(displayname);
         }
         if (flags.size() > 0) {
             for (ItemFlag f : flags) {
@@ -874,7 +880,7 @@ public class ItemBuilder {
             }
 
             public Object getNewNBTTagCompound() {
-                String ver = Bukkit.getServer().getClass().getPackage().getName().split(".")[3];
+                String ver = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     return Class.forName("net.minecraft.server." + ver + ".NBTTagCompound").newInstance();
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
@@ -923,7 +929,7 @@ public class ItemBuilder {
             }
 
             public Class<?> getCraftItemStackClass() {
-                String ver = Bukkit.getServer().getClass().getPackage().getName().split(".")[3];
+                String ver = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     return Class.forName("org.bukkit.craftbukkit." + ver + ".inventory.CraftItemStack");
                 } catch (ClassNotFoundException ex) {
