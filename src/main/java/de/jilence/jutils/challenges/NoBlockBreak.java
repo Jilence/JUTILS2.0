@@ -49,7 +49,6 @@ public class NoBlockBreak extends Challenge implements Listener {
 
     }
 
-
     @Override
     public Inventory getSettingsInventory() {
         return null;
@@ -83,6 +82,4 @@ public class NoBlockBreak extends Challenge implements Listener {
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
     }
-
-
 }
