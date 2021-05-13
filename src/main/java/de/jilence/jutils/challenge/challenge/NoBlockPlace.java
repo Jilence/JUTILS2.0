@@ -44,7 +44,7 @@ public class NoBlockPlace extends Challenge implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        event.getPlayer().sendMessage("SDasdasdasd");
+        ChallengeManager.loseChallenge(event.getPlayer(), "§7der Spieler §9%player §7ein Block abgebaut hat");
     }
 
     @Override

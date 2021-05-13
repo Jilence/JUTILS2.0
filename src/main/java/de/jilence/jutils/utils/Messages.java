@@ -38,10 +38,8 @@ public class Messages {
     }
 
     public static String timerWithoutHours(long time) {
-        long days = TimeUnit.SECONDS.toDays(time);
-        long hours = TimeUnit.SECONDS.toHours(time - TimeUnit.DAYS.toSeconds(days));
-        long minutes = TimeUnit.SECONDS.toMinutes(time - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours));
-        long seconds = TimeUnit.SECONDS.toSeconds(time - TimeUnit.DAYS.toSeconds(days) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes));
+        long minutes = TimeUnit.SECONDS.toMinutes(time);
+        long seconds = TimeUnit.SECONDS.toSeconds(time - TimeUnit.MINUTES.toSeconds(minutes));
 
         return ((minutes < 10) ? "0" + minutes : minutes) + ":" +
                 ((seconds < 10) ? "0" + seconds : seconds);
