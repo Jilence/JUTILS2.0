@@ -54,15 +54,11 @@ public final class Main extends JavaPlugin {
         Timer.startTimer();
         Messages.startupMessage();
 
-        for (int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
-            ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
-
+        for (ChallengeManager.Challenges challenges : ChallengeManager.Challenges.values()) {
             if (ChallengeManager.isChallengeEnabled(challenges)) {
                 challenges.getChallenge().onEnable();
             }
-
         }
-
     }
 
     @Override
