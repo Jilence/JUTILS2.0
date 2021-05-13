@@ -1,9 +1,7 @@
 package de.jilence.jutils.listener;
 
 import de.jilence.jutils.Main;
-import de.jilence.jutils.challenge.Challenge;
 import de.jilence.jutils.challenge.ChallengeManager;
-import de.jilence.jutils.challenge.challenge.NoBlockBreak;
 import de.jilence.jutils.inventory.*;
 import de.jilence.jutils.timer.Timer;
 import de.jilence.jutils.timer.TimerManager;
@@ -11,14 +9,12 @@ import de.jilence.jutils.utils.ConfigManager;
 import de.jilence.jutils.utils.GameRuleManager;
 import de.jilence.jutils.utils.InventoryBuilder;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
 

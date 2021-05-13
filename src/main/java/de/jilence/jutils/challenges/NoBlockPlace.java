@@ -1,24 +1,22 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
 import de.jilence.jutils.Main;
 import de.jilence.jutils.challenge.Challenge;
 import de.jilence.jutils.challenge.ChallengeManager;
-import de.jilence.jutils.utils.ConfigManager;
 import de.jilence.jutils.utils.ItemBuilder;
 import de.jilence.jutils.utils.LoreBuilder;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class BlockBreakOnSneak extends Challenge implements Listener {
+public class NoBlockPlace extends Challenge implements Listener {
     @Override
     public void onEnable() {
 
@@ -26,7 +24,7 @@ public class BlockBreakOnSneak extends Challenge implements Listener {
 
     @Override
     public void onStart() {
-        Bukkit.getPluginManager().registerEvents(new BlockBreakOnSneak(), Main.getPlugin(Main.class));
+        Bukkit.getPluginManager().registerEvents(new NoBlockPlace(), Main.getPlugin(Main.class));
     }
 
     @Override
@@ -39,27 +37,15 @@ public class BlockBreakOnSneak extends Challenge implements Listener {
 
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-
-        if(event.isSneaking()) {
-
-            Block block = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
-            block.setType(Material.AIR);
-
-            for(int i = 0; i < block.getLocation().getBlockY(); i++) {
-                event.getPlayer().getWorld().getBlockAt(block.getX(), i, block.getZ()).setType(Material.AIR);
-            }
-
-        }
-
-    }
-
     @Override
     public void onTick() {
-
+        Bukkit.broadcast(Component.text("TICK"), "bukkit.broadcast");
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        event.getPlayer().sendMessage("SDasdasdasd");
+    }
 
     @Override
     public Inventory getSettingsInventory() {
@@ -68,18 +54,18 @@ public class BlockBreakOnSneak extends Challenge implements Listener {
 
     @Override
     public ItemStack getDisplayItem() {
-        ItemStack itemStack = new ItemBuilder(Material.LEATHER_BOOTS, 1).displayname("§7Block-Break-on-Sneak §9Challenge").build();
+        ItemStack itemStack = new ItemBuilder(Material.GRASS_BLOCK, 1).displayname("§7No-Block-Place §9Challenge").build();
         new LoreBuilder(itemStack)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.HEADER)
                 .addSpace()
-                .addLoreLine("§7Wenn ein §9Spieler sneakt,")
-                .addLoreLine("§7wird der Block auf den er steht bis zum Bedrock §cabbgebaut")
+                .addLoreLine("§7Bei Dieser §9Herausforderung §7darf kein Spieler,")
+                .addLoreLine("§7einen Block platzieren")
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.RIGHT_LEFT_CLICK)
                 .addSpace()
                 .addDescription(LoreBuilder.DESCRIPTIONS.SETTINGS)
-                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.BLOCKBREAKONSNEAK), "§7Herausforderung")
+                .addBoolSettings(ChallengeManager.isChallengeEnabled(ChallengeManager.Challenges.NOBLOCKPLACE), "§7Herausforderung")
                 .addSpace();
 
         return itemStack;
@@ -94,4 +80,5 @@ public class BlockBreakOnSneak extends Challenge implements Listener {
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
     }
+
 }

@@ -1,4 +1,4 @@
-package de.jilence.jutils.challenge.challenge;
+package de.jilence.jutils.challenges;
 
 import de.jilence.jutils.challenge.Challenge;
 import de.jilence.jutils.challenge.ChallengeManager;
