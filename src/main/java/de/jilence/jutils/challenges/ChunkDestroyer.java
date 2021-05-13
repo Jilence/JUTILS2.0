@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ChunkDestroyer extends Challenge {
 
-    private static String INVENTORY_NAME = "§7 ChunkDestroyer §9Challenge";
+    private static final String INVENTORY_NAME = "§7 ChunkDestroyer §9Challenge";
 
     private static int duration;
     private static int tick;
@@ -50,10 +50,7 @@ public class ChunkDestroyer extends Challenge {
             tick = 0;
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-
                 if (player.getGameMode() == GameMode.SPECTATOR) continue;
-
-
                 for (Player players : Bukkit.getOnlinePlayers()) {
                     for (int i = 0; i < 16; i++) {
                         for (int j = 0; j < 16; j++) {
@@ -71,17 +68,12 @@ public class ChunkDestroyer extends Challenge {
                                 block.setType(Material.AIR);
                                 block = players.getWorld().getHighestBlockAt(loc_x, loc_z);
                             }
-
                             players.getWorld().getHighestBlockAt(loc_x, loc_z).setType(Material.AIR);
                         }
                     }
                 }
-
             }
-
-
         }
-
         tick++;
     }
 
@@ -141,7 +133,5 @@ public class ChunkDestroyer extends Challenge {
                             , clickType, 1, 600, 1, 1));
             player.openInventory(getSettingsInventory());
         }
-
     }
-
 }
