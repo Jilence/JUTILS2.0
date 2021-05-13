@@ -20,7 +20,8 @@ import java.util.UUID;
 
 public class SkullCreator {
 
-    private SkullCreator() {}
+    private SkullCreator() {
+    }
 
     private static boolean warningPosted = false;
 
@@ -309,6 +310,7 @@ public class SkullCreator {
                 Bukkit.getLogger().warning("SKULLCREATOR API - Using the legacy bukkit API with 1.13+ bukkit versions is not supported!");
                 warningPosted = true;
             }
-        } catch (NoSuchFieldException | IllegalArgumentException ignored) {}
+        } catch (NoSuchFieldException | IllegalArgumentException ignored) {
+        }
     }
 }
