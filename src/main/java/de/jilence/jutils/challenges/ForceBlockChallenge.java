@@ -31,7 +31,7 @@ public class ForceBlockChallenge extends Challenge {
     private static int delay;
     private static int time;
 
-    private static final HashMap<UUID, BossBar> bossBarList = new HashMap<>();
+    private static HashMap<UUID, BossBar> bossBarList = new HashMap<>();
 
     private static boolean task;
 
