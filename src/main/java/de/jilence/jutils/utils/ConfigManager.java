@@ -16,7 +16,7 @@ public class ConfigManager {
         TIMER_CONFIG("./plugins/JUTILS2.0", "timerConfig.yml");
 
         String path, name;
-        
+
         CONFIGS(String path, String name) {
             this.path = path;
             this.name = name;
@@ -34,12 +34,12 @@ public class ConfigManager {
 
     public ConfigManager(CONFIGS config) {
         File dir = new File(config.getPath());
-        if(!dir.exists()) {
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
         file = new File(dir, config.getName());
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -66,15 +66,16 @@ public class ConfigManager {
             e.printStackTrace();
         }
     }
+
     public Object get(String path) {
-        if(!contains(path)) {
+        if (!contains(path)) {
             return null;
         }
         return CURRENT_CONFIG.get(path);
     }
 
     public boolean getBool(String path) {
-        if(!contains(path)) {
+        if (!contains(path)) {
             set(path, false);
         }
         return (boolean) CURRENT_CONFIG.get(path);
@@ -86,17 +87,16 @@ public class ConfigManager {
     }
 
     public int getInt(String path) {
-        if(!contains(path)) {
+        if (!contains(path)) {
             set(path, 1);
         }
         return (int) CURRENT_CONFIG.get(path);
     }
 
     public int getInt(String path, int defaultInt) {
-        if(!contains(path)) {
+        if (!contains(path)) {
             set(path, defaultInt);
         }
         return (int) CURRENT_CONFIG.get(path);
     }
-
 }
