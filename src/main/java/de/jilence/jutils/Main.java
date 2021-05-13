@@ -77,6 +77,4 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new InventoryListener(), this);
         pluginManager.registerEvents(new GameListener(), this);
     }
-
-
 }
