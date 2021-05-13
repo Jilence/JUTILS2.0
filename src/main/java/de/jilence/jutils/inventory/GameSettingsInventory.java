@@ -15,7 +15,7 @@ public class GameSettingsInventory {
     public final static String INVENTORY_NAME = "§9Spieleinstellungen §8● ";
 
     public static Inventory getGameSettingsInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 4*9, Component.text(INVENTORY_NAME));
+        Inventory inventory = Bukkit.createInventory(null, 4 * 9, Component.text(INVENTORY_NAME));
         InventoryBuilder.fillInventory(inventory, new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayname("").build());
 
         ItemStack enderdragonDead = new ItemBuilder(Material.DRAGON_HEAD).displayname("§7EnderDragon §cDeath").build();
@@ -29,7 +29,7 @@ public class GameSettingsInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Schalte die Anwendung an/aus")
                 .addSpace();
 
-        inventory.setItem(1+9, enderdragonDead);
+        inventory.setItem(1 + 9, enderdragonDead);
 
         ItemStack witherDead = new ItemBuilder(Material.WITHER_ROSE).displayname("§7Wither §cDeath").build();
         new LoreBuilder(witherDead)
@@ -42,7 +42,7 @@ public class GameSettingsInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Schalte die Anwendung an/aus")
                 .addSpace();
 
-        inventory.setItem(2+9, witherDead);
+        inventory.setItem(2 + 9, witherDead);
 
         ItemStack playerDead = new ItemBuilder(Material.PLAYER_HEAD).displayname("§7Player §cDeath").build();
         new LoreBuilder(playerDead)
@@ -55,7 +55,7 @@ public class GameSettingsInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Schalte die Anwendung an/aus")
                 .addSpace();
 
-        inventory.setItem(3+9, playerDead);
+        inventory.setItem(3 + 9, playerDead);
 
         ItemStack villageSpawn = new ItemBuilder(Material.VILLAGER_SPAWN_EGG).displayname("§cVillager §7Spawn").build();
         new LoreBuilder(villageSpawn)
@@ -68,10 +68,7 @@ public class GameSettingsInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Schalte die Anwendung an/aus")
                 .addSpace();
 
-        inventory.setItem(4+9, villageSpawn);
-
+        inventory.setItem(4 + 9, villageSpawn);
         return inventory;
-
     }
-
 }
