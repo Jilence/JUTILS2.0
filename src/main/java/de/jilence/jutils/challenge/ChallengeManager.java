@@ -15,15 +15,15 @@ public class ChallengeManager {
 
     public enum Challenges {
 
-        NOBLOCKBREAK(1+9, new NoBlockBreak()),
-        NOBLOCKPLACE(2+9, new NoBlockPlace()),
-        CHUNKDESTROYER(3+9, new ChunkDestroyer()),
-        RANDOMEFFECTONDAMAGE(4+9, new RandomEffectOnDamage()),
-        AIRBREATH( 5+9, new AirBreath()),
-        RANDOMMOBDROP(6+9, new RandomMobDrop()),
-        RANDOMBLOCKDROP(7+9, new RandomBlockDrop()),
-        BLOCKBREAKONSNEAK(1+18, new BlockBreakOnSneak()),
-        FORCEBLOCKCHALLENGE(2+18, new ForceBlockChallenge());
+        NOBLOCKBREAK(1 + 9, new NoBlockBreak()),
+        NOBLOCKPLACE(2 + 9, new NoBlockPlace()),
+        CHUNKDESTROYER(3 + 9, new ChunkDestroyer()),
+        RANDOMEFFECTONDAMAGE(4 + 9, new RandomEffectOnDamage()),
+        AIRBREATH(5 + 9, new AirBreath()),
+        RANDOMMOBDROP(6 + 9, new RandomMobDrop()),
+        RANDOMBLOCKDROP(7 + 9, new RandomBlockDrop()),
+        BLOCKBREAKONSNEAK(1 + 18, new BlockBreakOnSneak()),
+        FORCEBLOCKCHALLENGE(2 + 18, new ForceBlockChallenge());
 
         ItemStack itemStack;
         int slot;
@@ -63,33 +63,29 @@ public class ChallengeManager {
         new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(String.valueOf(challenge), false);
     }
 
-
     public static boolean isChallengeEnabled(Challenges challenge) {
-        if(new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).contains(String.valueOf(challenge))) {
+        if (new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).contains(String.valueOf(challenge))) {
             return (boolean) new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).get(String.valueOf(challenge));
         }
         return false;
     }
+
     public static void toggleChallenge(Challenges challenge) {
-        if(new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).contains(String.valueOf(challenge))) {
+        if (new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).contains(String.valueOf(challenge))) {
             boolean bool = (boolean) new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).get(String.valueOf(challenge));
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(String.valueOf(challenge), !bool);
 
-            if(bool) {
-                for(int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
+            if (bool) {
+                for (int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
                     ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
-
-                    if(ChallengeManager.isChallengeEnabled(challenges)) {
+                    if (ChallengeManager.isChallengeEnabled(challenges)) {
                         challenges.getChallenge().onDisable();
                     }
-
                 }
             }
-
         } else {
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(String.valueOf(challenge), false);
         }
-
     }
 
     public static void winChallenge(Player player, String because) {
@@ -103,7 +99,6 @@ public class ChallengeManager {
         Bukkit.broadcast(Component.text(Main.getPrefix() + ""), "bukkit.broadcast");
 
         Timer.setPause(true);
-
     }
 
     public static void loseChallenge(Player player, String because) {
@@ -117,7 +112,5 @@ public class ChallengeManager {
         Bukkit.broadcast(Component.text(Main.getPrefix() + ""), "bukkit.broadcast");
 
         Timer.setPause(true);
-
     }
-
 }
