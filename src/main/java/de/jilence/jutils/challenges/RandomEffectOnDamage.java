@@ -51,16 +51,13 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
             PotionEffectType effect = PotionEffectType.values()[i];
 
             Bukkit.getOnlinePlayers().forEach(player -> player.addPotionEffect(new PotionEffect(effect, 99999, 1)));
-
         }
-
     }
 
     @Override
     public void onTick() {
 
     }
-
 
     @Override
     public Inventory getSettingsInventory() {
