@@ -40,8 +40,9 @@ public class Utils {
 
     public static void villageSpawn() {
         if (new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("villageSpawn")) {
-            Location village = Bukkit.getWorld("world").locateNearestStructure(Bukkit.getWorld("world").getSpawnLocation(), StructureType.VILLAGE, 5000, true);
-            Bukkit.getWorld("world").setSpawnLocation(village);
+            Location villageLocation = Bukkit.getWorld("world").locateNearestStructure(Bukkit.getWorld("world").getSpawnLocation(), StructureType.VILLAGE, 5000, true);
+            if (villageLocation == null) return;
+            Bukkit.getWorld("world").setSpawnLocation(villageLocation);
         }
     }
 }
