@@ -15,16 +15,14 @@ public class JoinQuitListener implements Listener {
         Player player = event.getPlayer();
         event.joinMessage(Component.text(Main.getPrefix() + "§7Der Spieler §9" + player.getName() + "§7 hat das Spiel §abetreten"));
 
-        if(player.getBedSpawnLocation() == null) {
+        if (player.getBedSpawnLocation() == null) {
             player.setBedSpawnLocation(player.getLocation());
         }
-
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         event.quitMessage(Component.text(Main.getPrefix() + "§7Der Spieler §9" + player.getName() + "§7 hat das Spiel §cverlassen"));
-
     }
 }
