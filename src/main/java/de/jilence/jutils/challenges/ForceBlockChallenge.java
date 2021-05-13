@@ -24,14 +24,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ForceBlockChallenge extends Challenge {
 
-    private static String MIN = "ForceBlockChallengeMin";
-    private static String MAX = "ForceBlockChallengeMax";
-    private static String INVENTORY_NAME = "§7 ForceBlockChallenge §9Challenge";
+    private static final String MIN = "ForceBlockChallengeMin";
+    private static final String MAX = "ForceBlockChallengeMax";
+    private static final String INVENTORY_NAME = "§7 ForceBlockChallenge §9Challenge";
 
     private static int delay;
     private static int time;
 
-    private static HashMap<UUID, BossBar> bossBarList = new HashMap<>();
+    private static final HashMap<UUID, BossBar> bossBarList = new HashMap<>();
 
     private static boolean task;
 
@@ -52,9 +52,7 @@ public class ForceBlockChallenge extends Challenge {
             bossBar.addPlayer(players);
             bossBarList.put(players.getUniqueId(), bossBar);
         }
-
         delay = getDelayInt();
-
     }
 
     @Override
@@ -66,28 +64,25 @@ public class ForceBlockChallenge extends Challenge {
     public void onDisable() {
 
         bossBarList.forEach((uuid, bossBar) -> bossBar.removePlayer(Objects.requireNonNull(Bukkit.getPlayer(uuid))));
-
     }
 
     @Override
     public void onTick() {
 
-        if(!task) {
+        if (!task) {
             delay--;
         }
-        if(delay == 0 && !task) {
+        if (delay == 0 && !task) {
             getNewTask();
         }
-
-        if(task) {
+        if (task) {
             bossBarList.forEach((uuid, bossBar) -> {
                 bossBar.setTitle("§7Stehe in §9" + Messages.timerWithoutHours(time) + " §7auf §9" + String.valueOf(nextMaterial).replace("_", ""));
             });
             time--;
         }
-
-        if(time == 0 && task) {
-            if(check() == null) {
+        if (time == 0 && task) {
+            if (check() == null) {
                 Bukkit.broadcast(Component.text(Main.getPrefix() + "§7Alle Spieler haben es §ageschafft."), "bukkit.broadcast");
                 bossBarList.forEach((uuid, bossBar) -> {
                     bossBar.setTitle("§7Warten auf nächste §9Anweisungen...");
@@ -98,7 +93,6 @@ public class ForceBlockChallenge extends Challenge {
                 ChallengeManager.loseChallenge(check(), "§9%player §7nicht auf §9" + String.valueOf(nextMaterial).replace("_", "") + "§7 stand");
             }
         }
-
     }
 
     private static int getDelayInt() {
@@ -112,15 +106,14 @@ public class ForceBlockChallenge extends Challenge {
 
         Player check = null;
         for (Player players : Bukkit.getOnlinePlayers()) {
-            if(players.getLocation().clone().add(0, -1, 0).getBlock().getType() == nextMaterial
-            || players.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == nextMaterial
-            || players.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == nextMaterial
-            || players.getLocation().clone().add(0, 0, 0).getBlock().getType() == nextMaterial
-            || players.getLocation().clone().add(0, -0.25, 0).getBlock().getType() == nextMaterial) {
+            if (players.getLocation().clone().add(0, -1, 0).getBlock().getType() == nextMaterial
+                    || players.getLocation().clone().add(0, -0.5, 0).getBlock().getType() == nextMaterial
+                    || players.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == nextMaterial
+                    || players.getLocation().clone().add(0, 0, 0).getBlock().getType() == nextMaterial
+                    || players.getLocation().clone().add(0, -0.25, 0).getBlock().getType() == nextMaterial) {
             } else
                 check = players;
         }
-
         return check;
     }
 
@@ -133,7 +126,6 @@ public class ForceBlockChallenge extends Challenge {
         bossBarList.forEach((uuid, bossBar) -> {
             bossBar.setTitle("§7Stehe in §9" + Messages.timerWithoutHours(time) + " §7auf §9" + String.valueOf(nextMaterial).replace("_", ""));
         });
-
     }
 
     @Override
@@ -208,16 +200,15 @@ public class ForceBlockChallenge extends Challenge {
         int min = new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getInt(MIN);
         int max = new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getInt(MAX);
 
-        if(material == Material.LIME_BED) {
+        if (material == Material.LIME_BED) {
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(MIN,
                     InventoryBuilder.inventoryClickIntManagerWithoutShift(min, clickType, 1, (max - 1), 1, 1));
             player.openInventory(getSettingsInventory());
         }
-        if(material == Material.RED_BED) {
+        if (material == Material.RED_BED) {
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(MAX,
                     InventoryBuilder.inventoryClickIntManagerWithoutShift(max, clickType, (min + 1), 60, 1, 1));
             player.openInventory(getSettingsInventory());
         }
-
     }
 }
