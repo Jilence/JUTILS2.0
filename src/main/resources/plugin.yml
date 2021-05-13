@@ -1,0 +1,9 @@
+name: JUTILS
+version: ${project.version}
+main: de.jilence.jutils.Main
+api-version: 1.16
+
+commands:
+  settings:
+  timer:
+  reset:
