@@ -50,12 +50,12 @@ public class Messages {
     public static void startupMessage() {
         Bukkit.getConsoleSender().sendMessage(Component.text(""));
         Bukkit.getConsoleSender().sendMessage(Component.text("\n" +
-                "░░░░░██╗██╗░░░██╗████████╗██╗██╗░░░░░░██████╗\n" +
+                "§5░░░░░██╗██╗░░░██╗████████╗██╗██╗░░░░░░██████╗\n" +
                 "░░░░░██║██║░░░██║╚══██╔══╝██║██║░░░░░██╔════╝\n" +
                 "░░░░░██║██║░░░██║░░░██║░░░██║██║░░░░░╚█████╗░\n" +
                 "██╗░░██║██║░░░██║░░░██║░░░██║██║░░░░░░╚═══██╗\n" +
-                "╚█████╔╝╚██████╔╝░░░██║░░░██║███████╗██████╔╝\n" +
-                "░╚════╝░░╚═════╝░░░░╚═╝░░░╚═╝╚══════╝╚═════╝░"));
+                "╚█████╔╝╚██████╔╝░░░██║░░░██║███████╗██████╔╝ §7coded by §9Jilence\n" +
+                "§5░╚════╝░░╚═════╝░░░░╚═╝░░░╚═╝╚══════╝╚═════╝░ §7Version: §9" + Main.getPlugin(Main.class).getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage(Component.text(""));
 
     }

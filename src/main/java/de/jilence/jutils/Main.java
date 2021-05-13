@@ -1,7 +1,6 @@
 package de.jilence.jutils;
 
 import de.jilence.jutils.challenge.ChallengeManager;
-import de.jilence.jutils.challenge.ChallengeSystem;
 import de.jilence.jutils.command.ResetCommand;
 import de.jilence.jutils.command.SettingCommand;
 import de.jilence.jutils.command.TimerCommand;
@@ -15,18 +14,8 @@ import de.jilence.jutils.utils.Messages;
 import de.jilence.jutils.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.StructureType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
-
 
 public final class Main extends JavaPlugin {
 
