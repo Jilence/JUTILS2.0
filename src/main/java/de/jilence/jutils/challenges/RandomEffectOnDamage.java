@@ -44,7 +44,7 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
 
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
 
             Random random = new Random();
             int i = random.nextInt(((PotionEffectType.values().length - 1)) + 1);
