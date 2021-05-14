@@ -22,8 +22,8 @@ public class TimerManager {
     }
 
     public static String getDirection() {
-        if(new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
-            if(new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).get("direction").toString().equalsIgnoreCase("forward")) {
+        if (new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
+            if (new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).get("direction").toString().equalsIgnoreCase("forward")) {
                 return "Vorwärts";
             } else
                 return "Rückwärts";
@@ -33,14 +33,14 @@ public class TimerManager {
     }
 
     public static void toggleDirection() {
-        if(isForward()) {
+        if (isForward()) {
             setDirection(DIRECTION.BACKWARD);
         } else
             setDirection(DIRECTION.FORWARD);
     }
 
     public static boolean isForward() {
-        if(new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
+        if (new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
             return new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).get("direction").toString().equalsIgnoreCase("forward");
         }
         new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).set("direction", DIRECTION.FORWARD.getDirection());
@@ -48,7 +48,7 @@ public class TimerManager {
     }
 
     public static boolean isBackward() {
-        if(new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
+        if (new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("direction")) {
             return new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).get("direction").toString().equalsIgnoreCase("backward");
         }
         new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).set("direction", DIRECTION.BACKWARD.getDirection());
@@ -72,7 +72,7 @@ public class TimerManager {
     }
 
     public static int getCountdownTime() {
-        if(new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("countdownTime")) {
+        if (new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).contains("countdownTime")) {
             return (int) new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).get("countdownTime");
         } else
             new ConfigManager(ConfigManager.CONFIGS.TIMER_CONFIG).set("countdownTime", 60);

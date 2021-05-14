@@ -6,10 +6,7 @@ import de.jilence.jutils.inventory.TimerInventory;
 import de.jilence.jutils.timer.Timer;
 import de.jilence.jutils.timer.TimerManager;
 import de.jilence.jutils.utils.Messages;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimerCommand implements CommandExecutor, TabCompleter {
+public class TimerCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -37,7 +34,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if(!TimerManager.isTimerEnabled()) {
+        if (!TimerManager.isTimerEnabled()) {
             player.sendMessage(Main.getError() + "§cDer Timer ist disabled");
             return true;
         }
@@ -49,18 +46,15 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(Main.getError() + "§cDer Timer läuft schon weiter");
                     return true;
                 }
-
                 Timer.setPause(false);
                 ChallengeSystem.startChallenges();
                 player.sendMessage(Main.getPrefix() + "§7Der §9Timer §7läuft nun weiter");
                 break;
             case "pause":
-
                 if (Timer.isPause()) {
                     player.sendMessage(Main.getError() + "§cDer Timer ist schon pausiert");
                     return true;
                 }
-
                 Timer.setPause(true);
                 player.sendMessage(Main.getPrefix() + "§7Der §9Timer §7wurde pausiert");
                 break;
@@ -71,10 +65,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                 Timer.resetTimer();
                 player.sendMessage(Main.getPrefix() + "§7Der §9Timer §7wurde resetet");
                 break;
-
-
         }
-
         return false;
     }
 
@@ -87,7 +78,6 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
         tabCompleter.add("resume");
         tabCompleter.add("settings");
         tabCompleter.add("reset");
-
 
         return tabCompleter;
     }

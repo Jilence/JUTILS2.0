@@ -13,7 +13,7 @@ import java.util.Comparator;
 public class Utils {
 
     public static void deleteFolder(String folder) {
-        if(Files.exists(Paths.get(folder))) {
+        if (Files.exists(Paths.get(folder))) {
             try {
                 Files.walk(Paths.get(folder)).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
             } catch (Exception e) {
@@ -24,24 +24,25 @@ public class Utils {
 
     public static void createPlayerDateFolder() {
         File world = new File("world/playerdata");
-        if(!world.exists()) {
+        if (!world.exists()) {
             world.mkdirs();
         }
         File nether = new File("world_nether/playerdata");
-        if(!nether.exists()) {
+        if (!nether.exists()) {
             nether.mkdirs();
         }
         File end = new File("world_the_nether/playerdata");
-        if(!end.exists()) {
+        if (!end.exists()) {
             end.mkdirs();
         }
 
     }
+
     public static void villageSpawn() {
-        if(new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("villageSpawn")) {
-            Location village = Bukkit.getWorld("world").locateNearestStructure(Bukkit.getWorld("world").getSpawnLocation(), StructureType.VILLAGE, 5000, true);
-            Bukkit.getWorld("world").setSpawnLocation(village);
+        if (new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("villageSpawn")) {
+            Location villageLocation = Bukkit.getWorld("world").locateNearestStructure(Bukkit.getWorld("world").getSpawnLocation(), StructureType.VILLAGE, 5000, true);
+            if (villageLocation == null) return;
+            Bukkit.getWorld("world").setSpawnLocation(villageLocation);
         }
     }
-
 }

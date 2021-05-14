@@ -15,7 +15,7 @@ public class JutilsSettingsInventory {
 
     public static Inventory getJutilsSettingsInventory() {
 
-        Inventory inventory = Bukkit.createInventory(null, 4*9, Component.text(INVENTORY_NAME));
+        Inventory inventory = Bukkit.createInventory(null, 4 * 9, Component.text(INVENTORY_NAME));
         InventoryBuilder.fillInventory(inventory, new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayname("").build());
 
         ItemStack timerItem = new ItemBuilder(Material.CLOCK).displayname("§8● §7Timer Einstellungen").build();
@@ -32,9 +32,7 @@ public class JutilsSettingsInventory {
                 .addDescription(LoreBuilder.DESCRIPTIONS.RIGHT_LEFT_CLICK)
                 .addSpace();
 
-        inventory.setItem(1+9, timerItem);
-
+        inventory.setItem(1 + 9, timerItem);
         return inventory;
-
     }
 }

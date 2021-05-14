@@ -16,7 +16,7 @@ public class TimerInventory {
     public final static String INVENTORY_NAME = "§9Timer-Einstellungen §8● ";
 
     public static Inventory getTimerInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3*9, Component.text(INVENTORY_NAME));
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, Component.text(INVENTORY_NAME));
         InventoryBuilder.fillInventory(inventory, new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayname("").build());
 
         ItemStack timerOnOffItem = new ItemBuilder((TimerManager.isTimerEnabled() ? Material.LIME_DYE : Material.GRAY_DYE)).displayname("§9Timer §7aktivieren/deaktivieren").build();
@@ -32,7 +32,7 @@ public class TimerInventory {
                 .addBoolSettings(TimerManager.isTimerEnabled(), "§7Timer Status")
                 .addSpace();
 
-        inventory.setItem(2+9, timerOnOffItem);
+        inventory.setItem(2 + 9, timerOnOffItem);
 
         ItemStack timerDirection = new ItemBuilder(Material.ANVIL).displayname("§9Timer §7vorwärts/rückwärts laufen lassen").build();
         new LoreBuilder(timerDirection)
@@ -55,7 +55,7 @@ public class TimerInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.RIGHTCLICK.getMessage() + "§7 Ändere den Status.")
                 .addSpace();
 
-        inventory.setItem(3+9, timerDirection);
+        inventory.setItem(3 + 9, timerDirection);
 
         ItemStack timerSetter = new ItemBuilder(Material.CLOCK).displayname("§7Setze den §9Countdown").build();
         new LoreBuilder(timerSetter)
@@ -75,7 +75,7 @@ public class TimerInventory {
                 .addParagraph("§7Zeit: §6" + Messages.timer(TimerManager.getCountdownTime()))
                 .addSpace();
 
-        inventory.setItem(4+9, timerSetter);
+        inventory.setItem(4 + 9, timerSetter);
 
         ItemStack timerReset = new ItemBuilder(Material.RED_CONCRETE).displayname("§7Resete den §cTimer").build();
         new LoreBuilder(timerReset)
@@ -90,7 +90,7 @@ public class TimerInventory {
                 .addLoreLine(LoreBuilder.MESSAGES.LEFTCLICK.getMessage() + "§7 Schalte die Einstellung an/aus")
                 .addSpace();
 
-        inventory.setItem(5+9, timerReset);
+        inventory.setItem(5 + 9, timerReset);
 
         ItemStack timerCredits = new ItemBuilder(Material.PAPER).displayname("§7Timer §9Credits").build();
         new LoreBuilder(timerCredits)
@@ -99,11 +99,7 @@ public class TimerInventory {
                 .addLoreLine("§7Und nur für dieses Plugin verwendet.")
                 .addSpace();
 
-        inventory.setItem(6+9, timerCredits);
-
-
+        inventory.setItem(6 + 9, timerCredits);
         return inventory;
-
     }
-
 }

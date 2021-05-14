@@ -17,11 +17,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class NoBlockBreak extends Challenge implements Listener {
 
-    private static NoBlockBreak noBlockBreak = new NoBlockBreak();
+    private static NoBlockBreak noBlockBreak;
 
     @Override
     public void onEnable() {
-
+        noBlockBreak = new NoBlockBreak();
     }
 
     @Override
@@ -48,7 +48,6 @@ public class NoBlockBreak extends Challenge implements Listener {
     public void onTick() {
 
     }
-
 
     @Override
     public Inventory getSettingsInventory() {
@@ -83,6 +82,4 @@ public class NoBlockBreak extends Challenge implements Listener {
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
     }
-
-
 }

@@ -44,23 +44,20 @@ public class RandomEffectOnDamage extends Challenge implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
 
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
 
             Random random = new Random();
             int i = random.nextInt(((PotionEffectType.values().length - 1)) + 1);
             PotionEffectType effect = PotionEffectType.values()[i];
 
             Bukkit.getOnlinePlayers().forEach(player -> player.addPotionEffect(new PotionEffect(effect, 99999, 1)));
-
         }
-
     }
 
     @Override
     public void onTick() {
 
     }
-
 
     @Override
     public Inventory getSettingsInventory() {

@@ -13,10 +13,9 @@ public class GameRuleInventory {
     public final static String INVENTORY_NAME = "§9Spielregeln §8● ";
 
     public static Inventory getGameRuleInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 4*9, Component.text(INVENTORY_NAME));
+        Inventory inventory = Bukkit.createInventory(null, 4 * 9, Component.text(INVENTORY_NAME));
         InventoryBuilder.fillInventory(inventory, new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).displayname("").build());
         GameRuleManager.setGameRuleInventory(inventory);
         return inventory;
     }
-
 }

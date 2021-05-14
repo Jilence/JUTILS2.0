@@ -41,24 +41,20 @@ public class BlockBreakOnSneak extends Challenge implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
 
-        if(event.isSneaking()) {
-
+        if (event.isSneaking()) {
             Block block = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
             block.setType(Material.AIR);
 
-            for(int i = 0; i < block.getLocation().getBlockY(); i++) {
+            for (int i = 0; i < block.getLocation().getBlockY(); i++) {
                 event.getPlayer().getWorld().getBlockAt(block.getX(), i, block.getZ()).setType(Material.AIR);
             }
-
         }
-
     }
 
     @Override
     public void onTick() {
 
     }
-
 
     @Override
     public Inventory getSettingsInventory() {

@@ -19,18 +19,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
-    private static String prefix = ChatColor.BLUE + "JUTILS " + ChatColor.DARK_GRAY +"● ";
-    private static String error =  ChatColor.RED + "Error " + ChatColor.DARK_GRAY + "● ";
-
+    private static final String PREFIX = ChatColor.BLUE + "JUTILS " + ChatColor.DARK_GRAY + "● ";
+    private static final String ERROR = ChatColor.RED + "Error " + ChatColor.DARK_GRAY + "● ";
 
     public static String getPrefix() {
-        return prefix;
+        return PREFIX;
     }
 
     public static String getError() {
-        return error;
+        return ERROR;
     }
 
+    @Override
     public void onLoad() {
         boolean reset = new ConfigManager(ConfigManager.CONFIGS.CONFIG).getBool("reset");
         if (reset) {
@@ -54,15 +54,11 @@ public final class Main extends JavaPlugin {
         Timer.startTimer();
         Messages.startupMessage();
 
-        for(int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
-            ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
-
-            if(ChallengeManager.isChallengeEnabled(challenges)) {
+        for (ChallengeManager.Challenges challenges : ChallengeManager.Challenges.values()) {
+            if (ChallengeManager.isChallengeEnabled(challenges)) {
                 challenges.getChallenge().onEnable();
             }
-
         }
-
     }
 
     @Override
@@ -74,14 +70,11 @@ public final class Main extends JavaPlugin {
         getCommand("timer").setExecutor(new TimerCommand());
         getCommand("reset").setExecutor(new ResetCommand());
     }
+
     public void listenerRegistration(PluginManager pluginManager) {
         pluginManager.registerEvents(new JoinQuitListener(), this);
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new InventoryListener(), this);
         pluginManager.registerEvents(new GameListener(), this);
     }
-
-
-
-
 }

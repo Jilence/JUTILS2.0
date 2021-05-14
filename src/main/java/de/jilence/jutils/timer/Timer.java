@@ -22,17 +22,15 @@ public class Timer {
     public static void setPause(boolean pause) {
         Timer.pause = pause;
 
-        if(!pause) {
-            for(int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
+        if (!pause) {
+            for (int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
                 ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
 
-                if(ChallengeManager.isChallengeEnabled(challenges)) {
+                if (ChallengeManager.isChallengeEnabled(challenges)) {
                     challenges.getChallenge().onPause();
                 }
-
             }
         }
-
     }
 
     public static boolean isPause() {
@@ -52,52 +50,47 @@ public class Timer {
 
         countdownInt = TimerManager.getCountdownTime();
 
-        if(!TimerManager.isTimerEnabled()) {
+        if (!TimerManager.isTimerEnabled()) {
             return;
         }
 
-        bukkitTask = Bukkit.getScheduler().runTaskTimer(Main.getPlugin(Main.class), new Runnable() {
-            @Override
-            public void run() {
+        bukkitTask = Bukkit.getScheduler().runTaskTimer(Main.getPlugin(Main.class), () -> {
 
-                if(isPause()) {
-                    ChallengeSystem.stopChallenges();
-                    Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6Der Timer ist pausiert")));
-                    return;
-                }
+            if (isPause()) {
+                ChallengeSystem.stopChallenges();
+                Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6Der Timer ist pausiert")));
+                return;
+            }
 
-                for(int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
-                    ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
+            for (int i = 0; i < ChallengeManager.Challenges.values().length; i++) {
+                ChallengeManager.Challenges challenges = ChallengeManager.Challenges.values()[i];
 
-                    if(ChallengeManager.isChallengeEnabled(challenges)) {
-                        challenges.getChallenge().onTick();
-                    }
-
-                }
-
-                if(TimerManager.isForward()) {
-                    setTimerInt(getTimerInt() + 1);
-                    Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6§l" + Messages.timerWithoutDays(getTimerInt()))));
-                    return;
-                }
-
-                if(TimerManager.isBackward()) {
-
-                    if(getCountdownInt() <= 0) {
-                        Bukkit.broadcast(Component.text(Main.getPrefix() + "§7Der §9Timer §7ist §cabgelaufen."), "bukkit.broadcast");
-                        Timer.setPause(true);
-                        ChallengeSystem.stopChallenges();
-                        stopTimer();
-                    }
-
-                    setCountdownInt(getCountdownInt() - 1);
-                    Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6§l" + Messages.timerWithoutDays(getCountdownInt()))));
-
+                if (ChallengeManager.isChallengeEnabled(challenges)) {
+                    challenges.getChallenge().onTick();
                 }
 
             }
-        }, 0, 20);
 
+            if (TimerManager.isForward()) {
+                setTimerInt(getTimerInt() + 1);
+                Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6§l" + Messages.timerWithoutDays(getTimerInt()))));
+                return;
+            }
+
+            if (TimerManager.isBackward()) {
+
+                if (getCountdownInt() <= 0) {
+                    Bukkit.broadcast(Component.text(Main.getPrefix() + "§7Der §9Timer §7ist §cabgelaufen."), "bukkit.broadcast");
+                    Timer.setPause(true);
+                    ChallengeSystem.stopChallenges();
+                    stopTimer();
+                }
+
+                setCountdownInt(getCountdownInt() - 1);
+                Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar(Component.text("§6§l" + Messages.timerWithoutDays(getCountdownInt()))));
+
+            }
+        }, 0, 20);
     }
 
     public static int getTimerInt() {
@@ -109,7 +102,6 @@ public class Timer {
     }
 
     public static int getCountdownInt() {
-
         return countdownInt;
     }
 

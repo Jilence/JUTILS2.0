@@ -38,20 +38,9 @@ public class RandomBlockDrop extends Challenge implements Listener {
 
         Bukkit.getPluginManager().registerEvents(new RandomBlockDrop(), Main.getPlugin(Main.class));
 
-        for(Material materialBlock : Material.values()) {
-            Random random = new Random();
-            Material material = Material.AIR;
-
-            while (material == Material.VOID_AIR || material == Material.AIR || material == Material.CAVE_AIR || material.isAir()) {
-                material = Material.values()[random.nextInt((Material.values().length - 1))];
-            }
-
-
-
-            randomItemDrop.put(materialBlock, material);
-
+        for (Material materialBlock : Material.values()) {
+            randomItemDrop.put(materialBlock, getRandomMaterial());
         }
-
     }
 
     @Override
@@ -67,40 +56,29 @@ public class RandomBlockDrop extends Challenge implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
 
-        if(!new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM)) {
+        if (!new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM)) {
 
             Material material = randomItemDrop.get(event.getBlock().getType());
-
             event.getBlock().setType(Material.AIR);
             try {
                 event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemBuilder(material).build());
             } catch (IllegalArgumentException ignore) {
                 //ignore
             }
-
         } else {
-            Random random = new Random();
-            Material material = Material.AIR;
-
-            while (material == Material.VOID_AIR || material == Material.AIR || material == Material.CAVE_AIR || material.isAir()) {
-                material = Material.values()[random.nextInt((Material.values().length - 1))];
-            }
-
             event.getBlock().setType(Material.AIR);
             try {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemBuilder(material).build());
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemBuilder(getRandomMaterial()).build());
             } catch (IllegalArgumentException ignore) {
                 //ignore
             }
         }
-
     }
 
     @Override
     public void onTick() {
 
     }
-
 
 
     @Override
@@ -154,10 +132,20 @@ public class RandomBlockDrop extends Challenge implements Listener {
 
     @Override
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
-        if(material == Material.REDSTONE_BLOCK) {
+        if (material == Material.REDSTONE_BLOCK) {
             boolean bool = new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getBool(RANDOM);
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(RANDOM, !bool);
             player.openInventory(getSettingsInventory());
         }
+    }
+
+    private Material getRandomMaterial() {
+        Random random = new Random();
+        Material material = Material.AIR;
+
+        while (material == Material.VOID_AIR || material == Material.AIR || material == Material.CAVE_AIR || material.isAir()) {
+            material = Material.values()[random.nextInt((Material.values().length - 1))];
+        }
+        return material;
     }
 }

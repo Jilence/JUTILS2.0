@@ -77,5 +77,4 @@ public class LoreBuilder {
             return message;
         }
     }
-
 }

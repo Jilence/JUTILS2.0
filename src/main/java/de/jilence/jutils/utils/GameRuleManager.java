@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-
 public class GameRuleManager {
 
     public enum GAMERULES {
@@ -43,7 +41,7 @@ public class GameRuleManager {
 
     public static void setGameRuleInventory(Inventory inventory) {
 
-        for(int i = 0; i < GAMERULES.values().length; i++) {
+        for (int i = 0; i < GAMERULES.values().length; i++) {
 
             GAMERULES gamerules = GAMERULES.values()[i];
             int slot = i + 10;
@@ -68,21 +66,18 @@ public class GameRuleManager {
 
     public static void onInventoryClick(Material material, Player player) {
 
-        if(material == Material.BLACK_STAINED_GLASS_PANE) {
+        if (material == Material.BLACK_STAINED_GLASS_PANE) {
             player.openInventory(MainInventory.getInventory());
             return;
         }
 
-        for(GAMERULES gamerules : GAMERULES.values()) {
+        for (GAMERULES gamerules : GAMERULES.values()) {
 
-            if(gamerules.getMaterial() == material) {
+            if (gamerules.getMaterial() == material) {
                 toggleGameRule(gamerules.getGameRule());
                 player.openInventory(GameRuleInventory.getGameRuleInventory());
                 return;
             }
-
         }
-
     }
-
 }

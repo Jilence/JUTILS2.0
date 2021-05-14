@@ -54,7 +54,6 @@ public class AirBreath extends Challenge implements Listener {
             bossBar.addPlayer(players);
             playerBossBarHashMap.put(players.getUniqueId(), bossBar);
         }
-
     }
 
     @Override
@@ -67,43 +66,39 @@ public class AirBreath extends Challenge implements Listener {
         playerBossBarHashMap.forEach((uuid, bossBar) -> {
             bossBar.removePlayer(Objects.requireNonNull(Bukkit.getPlayer(uuid)));
         });
-
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityAirChange(EntityAirChangeEvent event) {
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if(!player.isInWater()) {
+            if (!player.isInWater()) {
                 return;
             }
             player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 40, 255));
         }
-
     }
-
 
     @Override
     public void onTick() {
 
         for (Player players : Bukkit.getOnlinePlayers()) {
-
-            if(playerBreathHashMap.get(players.getUniqueId()) == null) {
+            if (playerBreathHashMap.get(players.getUniqueId()) == null) {
                 return;
             }
 
             int breathLevel = playerBreathHashMap.get(players.getUniqueId());
 
-            if(players.isInWater()) {
-                if(!((breathLevel + 2) > 10)) {
+            if (players.isInWater()) {
+                if (!((breathLevel + 2) > 10)) {
                     playerBreathHashMap.put(players.getUniqueId(), (breathLevel + 2));
 
-                } else if(!((breathLevel + 1) > 10)) {
+                } else if (!((breathLevel + 1) > 10)) {
                     playerBreathHashMap.put(players.getUniqueId(), (breathLevel + 1));
                 }
 
             } else {
-                if(!((breathLevel - 1) < 0))  {
+                if (!((breathLevel - 1) < 0)) {
                     playerBreathHashMap.put(players.getUniqueId(), (breathLevel - 1));
                 }
             }
@@ -112,31 +107,37 @@ public class AirBreath extends Challenge implements Listener {
             double breathLevelLong = breathLevel;
             BossBar bossBar = playerBossBarHashMap.get(players.getUniqueId());
 
-            if((breathLevelLong / 10) < 0 ) {
+            if ((breathLevelLong / 10) < 0) {
                 bossBar.setProgress(0);
-            } else if((breathLevelLong / 10) > 1) {
+            } else if ((breathLevelLong / 10) > 1) {
                 bossBar.setProgress(1);
             } else
                 bossBar.setProgress((breathLevelLong / 10));
 
             switch (breathLevel) {
 
-                case 10: case 9: case 8: case 7: {
+                case 10:
+                case 9:
+                case 8:
+                case 7: {
                     bossBar.setColor(BarColor.GREEN);
                     break;
                 }
-                case 6: case 5: case 4: {
+                case 6:
+                case 5:
+                case 4: {
                     bossBar.setColor(BarColor.YELLOW);
                     break;
                 }
-                case 3: case 2: case 1: {
+                case 3:
+                case 2:
+                case 1: {
                     bossBar.setColor(BarColor.RED);
                     break;
                 }
-
                 case 0: {
 
-                    if((players.getHealth() - (DAMAGE * 2)) < 0) {
+                    if ((players.getHealth() - (DAMAGE * 2)) < 0) {
                         players.setHealth(0);
                         return;
                     }
@@ -144,14 +145,9 @@ public class AirBreath extends Challenge implements Listener {
                     players.setHealth((players.getHealth() - (DAMAGE * 2)));
                     break;
                 }
-
             }
-
         }
-
     }
-
-
 
     @Override
     public Inventory getSettingsInventory() {
@@ -187,7 +183,6 @@ public class AirBreath extends Challenge implements Listener {
                 .addSpace();
 
         inventory.setItem(5 + 9, airBreathDamage);
-
         return inventory;
     }
 
@@ -221,19 +216,17 @@ public class AirBreath extends Challenge implements Listener {
     @Override
     public void onInventoryClick(Player player, ClickType clickType, Material material, Inventory inventory) {
 
-        if(material == Material.CLOCK) {
+        if (material == Material.CLOCK) {
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(AIRBREATHTIME, InventoryBuilder.inventoryClickIntManagerWithoutShift(
                     new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getInt(AIRBREATHTIME),
                     clickType, 1, 120, 1, 1));
             player.openInventory(getSettingsInventory());
         }
-
-        if(material == Material.DAMAGED_ANVIL) {
+        if (material == Material.DAMAGED_ANVIL) {
             new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).set(AIRBREATHDAMAGE, InventoryBuilder.inventoryClickIntManagerWithoutShift(
                     new ConfigManager(ConfigManager.CONFIGS.CHALLENGE_CONFIG).getInt(AIRBREATHDAMAGE),
                     clickType, 1, 10, 1, 1));
             player.openInventory(getSettingsInventory());
         }
-
     }
 }
